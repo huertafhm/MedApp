@@ -1,6 +1,6 @@
 <h1 style="margin-top: 25px; margin-bottom: 25px">My patients</h1>
 
-<div *ngIf="!_showPatient" class="alert">
+<div *ngIf="!showPatient" class="alert">
   Patient not found
 </div>
 
@@ -11,53 +11,32 @@
   <div>
     <table>
       <tr>
-        <td><label>id:</label></td>
+        <td style="width: 15%">id: </td>
         <td>{{patient.id}}</td>
       </tr>
       <tr>
-        <td><label>email:</label></td>
-        <td>{{patient.email}}</td>
-      </tr>
-      <tr>
-        <td><label>phone:</label></td>
-        <td>{{patient.phone}}</td>
+        <td><label>name:</label></td>
+        <td><input [(ngModel)]="patient.name" placeholder="name"/></td>
       </tr>
       <tr>
         <td><label>age:</label></td>
-        <td>{{patient.age}}</td>
-      </tr>      
+        <td><input [(ngModel)]="patient.age" placeholder="age"/></td>
+      </tr>
+      <tr>
+        <td><label>mobile:</label></td>
+        <td><input [(ngModel)]="patient.phone" placeholder="phone"/></td>
+      </tr>
       <tr>
         <td><label>notes:</label></td>
-        <td><textarea placeholder="Enter details" [(ngModel)]="patient.description" rows="10" cols="30">{{patient.description}}
+        <td><textarea [(ngModel)]="patient.description" placeholder="description" rows="10" cols="30">
           </textarea></td>
       </tr>
     </table>
   </div>
 </div>
-<button style="margin-bottom: 50px" (click)="savePatientDetails()">Save details</button>
-<button (click)="showReminder()" *ngIf="_showPatient">Send Appointment reminder</button>
-<button (click)="removePatient(patient.id)" *ngIf="_showPatient">Remove Patient</button>
-
-<div *ngIf="_showReminder" style="margin-bottom: 50px">
-  <h1>Enter appointment details:</h1>
-  <div>
-    <form (submit)="sendReminder($event)">
-      <table>
-        <tr>
-          <td><label>Date:</label></td>
-          <td><input type="date" min="01-01-2018"/></td>
-        </tr>
-        <tr>
-          <td><label>Time:</label></td>
-          <td><input type="time" min="8:00" max="22:00"/></td>
-        </tr>
-      </table>
-      <div class="input">
-        <input type="submit" value="Send reminder"> 
-      </div>
-    </form>
-  </div>
-</div>
+<button style="margin-bottom: 50px" (click)="goBack()">Back to list</button>
+<!--<button (click)="sendReminder()" *ngIf="showPatient">Send Reminder</button>
+<button (click)="removePatient(patient.id)" *ngIf="showPatient">Remove Patient</button>-->
 
 
 

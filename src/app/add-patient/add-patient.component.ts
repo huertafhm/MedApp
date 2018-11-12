@@ -1,11 +1,8 @@
-/*
-This component consists of a form to add a new patient which will be added to the
-database and automatically saved with the doctorId of the doctor who is logged in*/
-
-import { Component, Input, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Patient } from '../patient';
+import { Router } from '@angular/router';
+import { PatientService } from '../patient.service';
 import { AppComponent } from '../app.component';
 
 @Component({
@@ -13,15 +10,8 @@ import { AppComponent } from '../app.component';
   templateUrl: './add-patient.component.html',
   styleUrls: ['./add-patient.component.css']
 })
+export class AddPatientComponent implements OnInit { 
 
-@Injectable({
-  providedIn: 'root'
-})
-
-export class AddPatientComponent implements OnInit {
-  @Input() patient: Patient;
-
-  //These variables are to show alerts in the interface
   showAlertName:boolean = false;
   showAlertEmail:boolean = false;
   showAlertAge:boolean = false;
@@ -30,17 +20,16 @@ export class AddPatientComponent implements OnInit {
 
   constructor(
     private location:Location,
-    private appComponent:AppComponent,
-    private http: HttpClient
+    private router:Router,
+    private patientService:PatientService,
+    private appComponent:AppComponent
   ) { }
 
   ngOnInit() {
   }
 
   registerPatient(e) {
-
-    //All the input fields are tested against regular expressions so they match 
-    // the required format
+    
     e.preventDefault();
     var newName = e.target.elements[0].value;
     var regexpName = new RegExp(/^[A-Za-z]{2,} [A-Za-z]{2,}/);
@@ -70,20 +59,13 @@ export class AddPatientComponent implements OnInit {
     else
       this.showAlertPhone=false;
 
-    // If there are no alerts, the system calls the backend to store the new patient
     if (!(this.showAlertAge || this.showAlertEmail || this.showAlertName || this.showAlertPhone )) {
-      this.http.get<{message: string, patient: Patient}>("http://localhost:3000/api/maxid")
-      .subscribe((patientData) => {
-        this.patient = patientData.patient;
-        var newId = this.patient.id + 1;
-        this.patient = { id: newId, doctorid: this.appComponent.doctor.id, name: newName, age: newAge, phone: newPhone, description: '', email: newEmail};
-      
-        if (this.http.post<{message: string, patients: Patient}>("http://localhost:3000/api/patient", this.patient)
-        .subscribe()) {
-          window.confirm("Patient "+this.patient.name+" has been saved");
-          this.goBack();
-        }    
-      })
+
+      var patientId = this.patientService.patientNextId();
+      this.newPatient = Object.assign({id: patientId, doctorid: this.appComponent.doctor.id, name: newName, age: newAge, phone: newPhone});
+      this.patientService.registerPatient(this.newPatient);    
+      window.confirm("Patient "+this.newPatient.name+" has been saved.");     
+      this.router.navigate(['patients']);
     }
   }
 

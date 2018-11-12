@@ -6,8 +6,7 @@ var patientSchema = new mongoose.Schema({
   name : String,
   age : Number,
   phone : String,
-  description : String,
-  email : String
+  description : String
 });
 
 module.exports = mongoose.model('patient', patientSchema);

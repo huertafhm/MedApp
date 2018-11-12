@@ -6,19 +6,20 @@
   <table>
     <tr>
       <td style="width: 15%"><label>name:</label></td>
-      <td>{{doctor.name}}</td>
+      <td><input [(ngModel)]="doctor.name" placeholder="name"/></td>
     </tr>
     <tr>
       <td><label>e-mail:</label></td>
-      <td>{{doctor.email}}</td>
+      <td><input [(ngModel)]="doctor.email" placeholder="email"/></td>
     </tr>
     <tr>
       <td><label>phone:</label></td>
-      <td>{{doctor.phone}}</td>
+      <td><input [(ngModel)]="doctor.phone" placeholder="phone"/></td>
     </tr>
     <tr>
       <td><label>specialty:</label></td>
-      <td>{{doctor.specialty}}</td>
+      <td><input [(ngModel)]="doctor.specialty" placeholder="specialty"/></td>
     </tr>
-   </table>  
+    <!--<tr><button (click)="undoChanges()">Undo changes</button></tr>-->
+  </table>  
 </div>

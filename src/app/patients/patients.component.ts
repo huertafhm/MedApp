@@ -1,47 +1,38 @@
-/*
-This component shows the list of patients that belong exclusively to the doctor who is logged in
-*/
-import { Component, Input, OnInit, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Patient } from '../patient';
+import {PatientService} from '../patient.service';
 import { AppComponent } from '../app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
   styleUrls: ['./patients.component.css']
 })
-
-@Injectable({
-  providedIn: 'root'
-})
-
 export class PatientsComponent implements OnInit {
- @Input() patients: Patient[];
-
+  patients: Patient[];
+  
   constructor(
-    private http: HttpClient,
+    private patientService: PatientService,
     private appComponent: AppComponent,
     private router: Router
   ) {  }
 
+  doctorId = this.appComponent.doctor.id;
+  searchString:string = '';
+
   ngOnInit() {
     this.getPatients();
   }
-  searchString:string = '';
 
-  //This method is called everytime a new character is added or deleted from the search box, so it 
-  // dynamically feeds the list of patients
   getPatients(): void {
-    this.http
-    .get<{message: string, patients: Patient[]}>('http://localhost:3000/api/patients/' + this.appComponent.doctor.id)
-    .subscribe((patientData) => {
-      this.patients = patientData.patients.filter(patient => patient.name.toLowerCase().includes(this.searchString.toLocaleLowerCase()));
-    });
-  }
+   this.patientService.getPatients(this.doctorId, this.searchString)
+     .subscribe(patients => this.patients = patients);
+    }
 
   addPatient() {
     this.router.navigate(['addpatient']);
   }
+
 }
+

@@ -1,11 +1,8 @@
-/*
-This component is used for logging in. It takes the values from the login form and
-calls the function in app component to check in the database if the credentials are 
-correct.
-*/
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
+import { DoctorService } from '../doctor.service';
+import { Doctor } from '../doctor';
 
 @Component({
   selector: 'app-loginform',
@@ -14,12 +11,11 @@ import { AppComponent } from '../app.component';
 })
 export class LoginformComponent implements OnInit {
 
-  // This variable is set to true if an alert needs to be shown in the interface
   showAlert:boolean = false;
 
-  constructor(
-    private router:Router,
-    private appComponent:AppComponent,
+  constructor(private router:Router,
+              private appComponent:AppComponent,    
+              private doctorService:DoctorService
     ) { }
 
   ngOnInit() {
@@ -31,14 +27,17 @@ export class LoginformComponent implements OnInit {
 
   loginUser(e){
     e.preventDefault();
+    console.log(e);
     var username = e.target.elements[0].value;
     var password = e.target.elements[1].value;
-    try {      
-      this.appComponent.logIn(username, password);
+        
+    if(this.doctorService.logIn(username, password)){ 
       this.router.navigate(['home']);
-    } catch (err) {
-      console.log("there was an error");
+      this.appComponent.setLoggedUser(true);
+      this.appComponent.setDoctor(username);
     }
-    
+    else{
+      this.showAlert = true;
+    }
   }
 }
