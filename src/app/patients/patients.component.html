@@ -1,0 +1,25 @@
+<div>
+  <table style="width:100%; margin-bottom: 25px">
+    <tr>
+      <th style="float: left"><h1>My patients</h1></th>
+      <th style="float: right"><input (keyup)="getPatients()" [(ngModel)]="searchString" placeholder=" Search by name"/>
+      </th> 
+    </tr>
+  </table>
+</div>
+
+<button style="margin-bottom: 20px" (click)="addPatient()">Add new patient</button>
+
+  <ul class="patients">
+
+    <li  *ngFor="let patient of patients">
+    <a routerLink="/detail/{{patient.id}}">
+      <span class="badge">{{patient.id}}</span> {{patient.name}}
+      </a>
+    </li>
+    
+  </ul>
+
+
+
+
