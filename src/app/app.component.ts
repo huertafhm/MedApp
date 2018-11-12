@@ -10,8 +10,8 @@ import { DoctorService } from './doctor.service';
 
 export class AppComponent {
   title = 'MedApp';
-  private _loggedUser: boolean = false;
-  private _registering: boolean = false;
+  public _loggedUser: boolean = false;
+  public _registering: boolean = false;
 
   @Input() doctor: Doctor;
   
